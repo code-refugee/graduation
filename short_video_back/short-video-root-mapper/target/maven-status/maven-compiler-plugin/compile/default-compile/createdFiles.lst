@@ -1,0 +1,8 @@
+com\yuhangTao\mapper\SearchRecordsMapper.class
+com\yuhangTao\mapper\UsersLikeVideosMapper.class
+com\yuhangTao\mapper\VideosMapper.class
+com\yuhangTao\mapper\UsersMapper.class
+com\yuhangTao\mapper\BgmMapper.class
+com\yuhangTao\mapper\UsersFansMapper.class
+com\yuhangTao\mapper\CommentsMapper.class
+com\yuhangTao\mapper\UsersReportMapper.class

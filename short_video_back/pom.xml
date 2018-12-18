@@ -9,6 +9,7 @@
         <module>short-video-root-mapper</module>
         <module>short-video-root-service</module>
         <module>short-video-root-mini-api</module>
+        <!--<module>mybatis-generatorConfig</module>-->
     </modules>
 
     <parent>

@@ -3,9 +3,12 @@ const app = getApp()
 
 Page({
   data: {
-
+    
   },
-  doRegist: function(e){
+  onLoad: function(){
+    
+  },
+  doLogin: function(e){
     var formobject=e.detail.value;//我们可以通过打印e来看看e中包含了什么
     var username=formobject.username;
     var password=formobject.password;
@@ -27,7 +30,7 @@ Page({
 
       //调用api 访问后端(此处我们传的是一个json对象)
       wx.request({
-        url: serverUrl +'/regist',
+        url: serverUrl +'/Login',
         method: 'POST',
         data: {
           username: username, //这里的变量名要与后端pojo类的字段一一对应
@@ -45,11 +48,15 @@ Page({
           //200表示注册成功
           if(status==200){
             wx.showToast({
-              title: '恭喜你，注册成功',
-              icon: 'none',
+              title: '验证通过',
+              icon: 'success',
               duration: 2000
-            })
-            //
+            }),
+              //将用户信息保存到本地缓存中去
+              app.setGlobalUserInfo(res.data.data);
+              wx.redirectTo({
+                url: '../mine/mine',
+              })
           }else{
             wx.showToast({
               title: res.data.msg,
@@ -68,6 +75,13 @@ Page({
         }
       })
     }
+  },
+  
+  goRegistPage: function(){
+    wx.navigateTo({
+      url: '../userRegist/regist'
+    })
+
   },
 
   //写数据时隐藏Toast

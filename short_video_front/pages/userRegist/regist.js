@@ -38,6 +38,7 @@ Page({
         },
         //https请求成功
         success: function(res){
+          console.log(res);
           //提示消失
           wx.hideLoading();
          //此处的status是后端传回来的
@@ -48,8 +49,9 @@ Page({
               title: '恭喜你，注册成功',
               icon: 'none',
               duration: 2000
-            })
-            //
+            }),
+            //将用户信息保存到本地缓存中去
+              app.setGlobalUserInfo(res.data.data);
           }else{
             wx.showToast({
               title: res.data.msg,
@@ -68,6 +70,13 @@ Page({
         }
       })
     }
+  },
+
+  //跳转至登录页面
+  goLoginPage: function(){
+    wx.redirectTo({
+      url: '../userLogin/login'
+    })
   },
 
   //写数据时隐藏Toast

@@ -3,6 +3,7 @@ package com.yuhangTao.impl;
 
 import com.yuhangTao.pojo.Users;
 
+
 /**
 
  * 用户服务接口
@@ -25,4 +26,10 @@ public interface UserService {
 
     //2.
     void createUser(Users user);
+
+    //3
+    Users queryIsLegalUser(String username,String password);
+
+    //4
+    void updateUserInfo(Users user);
 }

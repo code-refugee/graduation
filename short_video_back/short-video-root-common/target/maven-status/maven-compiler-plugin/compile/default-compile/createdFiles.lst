@@ -22,6 +22,7 @@ com\yuhangTao\org\n3r\idworker\strategy\DefaultWorkerIdStrategy.class
 com\yuhangTao\org\n3r\idworker\DayCode.class
 com\yuhangTao\org\n3r\idworker\strategy\DayPrefixRandomCodeStrategy.class
 com\yuhangTao\org\n3r\idworker\strategy\DefaultWorkerIdStrategy$2.class
+com\yuhangTao\utils\RedisOperator.class
 com\yuhangTao\org\n3r\idworker\strategy\DefaultRandomCodeStrategy.class
 com\yuhangTao\org\n3r\idworker\InvalidSystemClock.class
 com\yuhangTao\org\n3r\idworker\utils\IPv4Utils.class

@@ -29,7 +29,7 @@
       </view>
 
       <view>
-        <button class='gologinBtn' type='warn' bindtap='goRegistPage'>注册</button>
+        <button class='gologinBtn' type='warn' bindtap='goRegistPage'>没有账号？点击注册</button>
       </view>
     </form>
   </view>

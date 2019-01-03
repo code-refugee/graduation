@@ -3,13 +3,16 @@ package com.yuhangTao.controller;
 import com.yuhangTao.impl.UserService;
 import com.yuhangTao.pojo.Users;
 import com.yuhangTao.utils.IMoocJSONResult;
+import com.yuhangTao.vo.UsersVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -71,35 +74,12 @@ public class UserBusinessController extends BasicController{
 
                 File userfaceFile=new File(finalFilePath);
 
-                if(userfaceFile.getParentFile()!=null||userfaceFile.getParentFile().isDirectory()){
+                if(userfaceFile.getParentFile()!=null&&!userfaceFile.getParentFile().isDirectory()){
                     //创建父目录文件夹
                     userfaceFile.getParentFile().mkdirs();
                 }
 
-                try {
-                    inputStream=file.getInputStream();
-                    fileOutputStream=new FileOutputStream(userfaceFile);
-                    IOUtils.copy(inputStream,fileOutputStream);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    return IMoocJSONResult.errorMsg("文件上传失败");
-                }finally {                   //关闭流
-                    if(inputStream!=null) {
-                        try {
-                            inputStream.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    if(fileOutputStream!=null){
-                        try {
-                            fileOutputStream.flush();
-                            fileOutputStream.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
+                doCpopy(file,inputStream,fileOutputStream,userfaceFile);
             }
             //将用户头像保存的路径更新到数据库中
             Users user=new Users();
@@ -110,4 +90,25 @@ public class UserBusinessController extends BasicController{
             return IMoocJSONResult.ok(uploadPathDB);
         }
     }
+
+    @GetMapping("/query")
+    @ApiOperation(value = "查询用户信息",notes = "查询用户信息的接口")
+    @ApiImplicitParam(name = "userId",value = "用户Id",required = true,dataType = "String",paramType = "query")
+    public IMoocJSONResult queryUserInfo(String userId){
+
+        if(StringUtils.isBlank(userId))
+            return IMoocJSONResult.errorMsg("用户Id不能为空");
+
+        Users result=userService.queryUserInfo(userId);
+        if(result==null){
+            return IMoocJSONResult.errorMsg("用户不存在");
+        }
+        /*为什么要用UsersVO，因为我们将它的password字段设置为了JsonIgnore
+         * 其实你也可以用result.setPassword("")然后返回result*/
+        UsersVO usersVO=new UsersVO();
+        BeanUtils.copyProperties(result,usersVO);
+        return IMoocJSONResult.ok(usersVO);
+    }
+
+
 }

@@ -24,6 +24,7 @@ import java.util.UUID;
  * 用户注册、登录和注销
  *
  * @Api用于controller类上
+ * paramType是参数存放位置
  * */
 
 @RestController

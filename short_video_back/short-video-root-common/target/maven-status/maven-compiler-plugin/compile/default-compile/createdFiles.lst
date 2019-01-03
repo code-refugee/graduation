@@ -1,4 +1,5 @@
 com\yuhangTao\utils\MD5Utils.class
+com\yuhangTao\enums\VideoStatusEnum.class
 com\yuhangTao\org\n3r\idworker\Code.class
 com\yuhangTao\org\n3r\idworker\Sid$1.class
 com\yuhangTao\org\n3r\idworker\Test.class
@@ -17,6 +18,7 @@ com\yuhangTao\org\n3r\idworker\WorkerIdStrategy.class
 com\yuhangTao\org\n3r\idworker\strategy\DefaultRandomCodeStrategy$1.class
 com\yuhangTao\org\n3r\idworker\strategy\DefaultWorkerIdStrategy$1.class
 com\yuhangTao\org\n3r\idworker\strategy\FileLock.class
+com\yuhangTao\utils\FFMpegUtils.class
 com\yuhangTao\org\n3r\idworker\utils\Props$Silent.class
 com\yuhangTao\org\n3r\idworker\strategy\DefaultWorkerIdStrategy.class
 com\yuhangTao\org\n3r\idworker\DayCode.class

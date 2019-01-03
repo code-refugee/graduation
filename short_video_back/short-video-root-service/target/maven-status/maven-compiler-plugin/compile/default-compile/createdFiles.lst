@@ -1,2 +1,6 @@
+com\yuhangTao\impl\VideoService.class
+com\yuhangTao\service\BgmServiceImpl.class
+com\yuhangTao\service\VideoServiceImpl.class
 com\yuhangTao\impl\UserService.class
 com\yuhangTao\service\UserServiceImpl.class
+com\yuhangTao\impl\BgmService.class

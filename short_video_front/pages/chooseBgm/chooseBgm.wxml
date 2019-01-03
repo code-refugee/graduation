@@ -1,0 +1,24 @@
+<view>
+
+  <form bindsubmit='uploadVideo'>
+
+    <radio-group name='bgmRadioId'>
+    <view wx:for='{{bgmlist}}'>
+      <view class='container'>
+       <radio style='margin-top:20px' value='{{item.id}}'></radio>
+        <audio id='myAudio' name='{{item.name}}' author='{{item.author}}'
+        src='{{serverUrl}}{{item.path}}' style='width:300px' controls='{{true}}' loop='{{false}}'></audio>
+      </view>
+    </view>
+  </radio-group>  
+
+    <view class='inputView'>
+      <label class='loginLabel'>视频描述</label>
+      <input name='desc' class='inputText' placeholder='说点什么吧...（50字）'                    maxlength='50'></input>
+    </view>
+
+    <button class='submitBtn' type='primary' form-type='submit'>上传视频</button>
+
+    <button class='resetBtn' type='warn' form-type='reset'>重置</button>
+  </form>
+</view>

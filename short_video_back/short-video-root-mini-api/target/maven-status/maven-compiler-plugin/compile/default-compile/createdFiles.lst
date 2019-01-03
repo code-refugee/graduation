@@ -1,3 +1,2 @@
 com\yuhangTao\Application.class
-com\yuhangTao\controller\Regist.class
-com\yuhangTao\controller\Login.class
+com\yuhangTao\controller\VideoBusinessController.class

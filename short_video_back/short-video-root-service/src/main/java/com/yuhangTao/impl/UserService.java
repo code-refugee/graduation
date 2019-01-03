@@ -32,4 +32,7 @@ public interface UserService {
 
     //4
     void updateUserInfo(Users user);
+
+    //5
+    Users queryUserInfo(String userId);
 }

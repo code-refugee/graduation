@@ -90,4 +90,15 @@ public class UserServiceImpl implements UserService {
          * 的where 条件*/
         usersMapper.updateByExampleSelective(user,example);
     }
+
+    /*查询用户信息*/
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public Users queryUserInfo(String userId) {
+        Example example=new Example(Users.class);
+        Example.Criteria criteria=example.or();
+        criteria.andEqualTo("id",userId);
+        Users user= (Users) usersMapper.selectOneByExample(example);
+        return user;
+    }
 }

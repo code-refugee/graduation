@@ -31,7 +31,6 @@
 
 .container{
   display: flex;
-  flex-direction: row;
   margin-top: 20rpx;
   justify-content: space-around
 }

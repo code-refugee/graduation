@@ -21,7 +21,11 @@ public class BasicController {
     //文件保存的命名空间(绝对路径)
     public static final String FILESPACE="F:/graduation/userupload";
 
+    //ffmpeg工具所在的路径
     public static final String FFMPEGEXE="D:/工具/FFmpeg/ffmpeg/bin/ffmpeg.exe";
+
+    //每次查询的数量
+    public static final Integer PAGESIZE=4;
 
     //将视频上传至相应的文件夹下
     public void doCpopy(MultipartFile file, InputStream inputStream, FileOutputStream fileOutputStream, File toFile){

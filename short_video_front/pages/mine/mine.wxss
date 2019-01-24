@@ -1,5 +1,4 @@
-/**mine.wxss**/
-
+/*mine.wxss*/
 .page{
   font-size: 14px;
 }
@@ -14,7 +13,7 @@
 .face{
   width: 90px;
   height: 90px;
-  border-radius: 50%; /*添加圆角边框*/
+  border-radius: 50%;   /*添加圆角的边框*/
   margin-top: 20px;
 }
 
@@ -38,7 +37,7 @@
 }
 
 .info-items{
-  margin-left: 30px;
+  margin-left: 30px
 }
 
 .line{
@@ -50,10 +49,5 @@
 
 .logout{
   margin-top: 3px;
-  float: right;
-}
-
-.uploadvideo{
-  margin-top: 1px;
   float: right;
 }

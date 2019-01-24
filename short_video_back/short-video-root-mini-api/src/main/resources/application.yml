@@ -16,7 +16,7 @@ spring:
 
     driver-class-name: com.mysql.jdbc.Driver
 
-    url: jdbc:mysql://localhost:3306/shortvideo?characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/shortvideo?useUnicode=true&characterEncoding=UTF-8&useAffectedRows=true
 
     username: root
 

@@ -1,15 +1,16 @@
+<!--chooseBgm.wxml-->
 <view>
 
   <form bindsubmit='uploadVideo'>
 
     <radio-group name='bgmRadioId'>
-    <view wx:for='{{bgmlist}}'>
+    <block wx:for='{{bgmlist}}'>
       <view class='container'>
-       <radio style='margin-top:20px' value='{{item.id}}'></radio>
         <audio id='myAudio' name='{{item.name}}' author='{{item.author}}'
         src='{{serverUrl}}{{item.path}}' style='width:300px' controls='{{true}}' loop='{{false}}'></audio>
+        <radio style='margin-top:20px' value='{{item.id}}'></radio>
       </view>
-    </view>
+    </block>
   </radio-group>  
 
     <view class='inputView'>

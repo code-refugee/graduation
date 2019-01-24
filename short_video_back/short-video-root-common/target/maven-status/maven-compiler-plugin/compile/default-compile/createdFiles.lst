@@ -6,6 +6,7 @@ com\yuhangTao\org\n3r\idworker\Test.class
 com\yuhangTao\org\n3r\idworker\utils\Props.class
 com\yuhangTao\org\n3r\idworker\Id.class
 com\yuhangTao\org\n3r\idworker\Sid.class
+com\yuhangTao\utils\PageResult.class
 com\yuhangTao\utils\MyMapper.class
 com\yuhangTao\org\n3r\idworker\utils\Utils.class
 com\yuhangTao\org\n3r\idworker\utils\Serializes.class

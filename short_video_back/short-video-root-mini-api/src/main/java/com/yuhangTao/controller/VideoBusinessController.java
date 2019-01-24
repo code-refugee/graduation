@@ -7,16 +7,17 @@ import com.yuhangTao.pojo.Bgm;
 import com.yuhangTao.pojo.Videos;
 import com.yuhangTao.utils.FFMpegUtils;
 import com.yuhangTao.utils.IMoocJSONResult;
+import com.yuhangTao.utils.PageResult;
 import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
 import java.util.UUID;
@@ -125,6 +126,26 @@ public class VideoBusinessController extends BasicController{
         }else{
             return IMoocJSONResult.errorMsg("文件上传失败");
         }
+    }
+
+    /**
+     * 获取所有符合条件且未被禁播的视频信息
+     * @param video
+     * @param isSaveRecords 1-需要保存；0/空-不需要保存
+     * @param page 当前是第几页
+     * @return
+     */
+    @PostMapping("/quarryAll")
+    @ApiOperation(value = "获取所有未禁播的视频信息",notes = "获取所有未禁播的视频信息接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "isSaveRecords",value = "是否保存搜索记录",required = false,dataType = "Integer",paramType = "query"),
+            @ApiImplicitParam(name = "page",value = "第几页",required = false,dataType = "Integer",paramType = "query")
+    })
+    public IMoocJSONResult quarryAll(@RequestBody Videos video, Integer isSaveRecords, Integer page){
+        if(page==null)
+            page=1;
+        PageResult result=videoService.quarryAllVideos(video,isSaveRecords,page,PAGESIZE);
+        return IMoocJSONResult.ok(result);
     }
 
 

@@ -1,36 +1,36 @@
+<!--login.wxml-->
 <view>
+
   <view>
     <image class='login-img' src='../resource/images/dsp.jpg'></image>
   </view>
 
   <view>
-    <!--绑定js事件，通过form-type为submit的按钮触发，同时提交数据-->
+
     <form bindsubmit='doLogin'>
+
       <!--账号-->
       <view class='inputView'>
         <image class='nameImage' src='../resource/images/username.png'></image>
         <label class='loginLabel'>账号</label>
-        <input class='inputText' name='username' placeholder='请输入账号' bindtap='writing'></input>
+        <input name='username' class='inputText' placeholder='请输入账号'                               bindtap='writing'></input>
       </view>
 
-      <!-- 分割线 -->
+      <!--分割线-->
       <view class='line'></view>
 
       <!--密码-->
       <view class='inputView'>
         <image class='keyImage' src='../resource/images/password.png'></image>
         <label class='loginLabel'>密码</label>
-        <input class='inputText' name='password' placeholder='请输入密码' password='{{true}}                ' bindtap='writing'></input>
-      </view>
-      
-      <!--密码-->
-      <view>
-        <button class='loginBtn' form-type='submit' type='primary'>登录</button>
+        <input name='password' class='inputText' placeholder='请输入密码' password='{{true}}'           bindtap='writing'></input>
       </view>
 
-      <view>
-        <button class='gologinBtn' type='warn' bindtap='goRegistPage'>没有账号？点击注册</button>
-      </view>
+      <view><button class='loginBtn' form-type='submit' type='primary'>登录</button></view>
+
+      <view><button class='goLoginBtn' type='warn' bindtap='goRegistPage'>没有账号？点击注册</button></view>
+    
     </form>
+
   </view>
 </view>

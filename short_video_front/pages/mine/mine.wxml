@@ -1,10 +1,13 @@
+<!--mine.wxml-->
 <view>
   <view class='container'>
-    <image src='{{faceurl}}' class='face' bindtap='changeFace'></image>
+    <image src='{{faceUrl}}' class='face' bindtap='changeFace'></image>
     <label class='nickname'>{{nickname}}</label>
-
-    <button size='mini' class='uploadvideo' bindtap='uploadvideo'>上传视频</button>
-    <button size='mini' class='logout' bindtap='logout'>注销</button>
+    
+    <!-- <block wx:if='{{isMe}}'> -->
+      <button size='mini' class='uploadvideo' bindtap='uploadVideo'>上传视频</button>
+      <button size='mini' class='logout' bindtap='logout'>注销</button>
+    <!-- </block> -->
 
     <view class='container-row'>
       <label class='info-items'>{{fansCounts}}粉丝</label>

@@ -11,9 +11,9 @@
 		"newFeature": true
 	},
 	"compileType": "miniprogram",
-	"libVersion": "2.4.2",
-	"appid": "wxa10f9d0698be3bdf",
-	"projectname": "short_video_front",
+	"libVersion": "2.2.5",
+	"appid": "wx7e8ea177e003f5a2",
+	"projectname": "short-video-dev",
 	"debugOptions": {
 		"hidedInDevtools": []
 	},

@@ -1,6 +1,7 @@
 com\yuhangTao\pojo\UsersFans.class
 com\yuhangTao\pojo\UsersReport.class
 com\yuhangTao\pojo\UsersLikeVideos.class
+com\yuhangTao\vo\VideosVO.class
 com\yuhangTao\pojo\Bgm.class
 com\yuhangTao\pojo\Comments.class
 com\yuhangTao\vo\UsersVO.class

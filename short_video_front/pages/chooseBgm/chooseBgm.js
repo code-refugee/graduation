@@ -1,114 +1,140 @@
-//获取应用实例(也就是app.js中的APP（）)
+//index.js
+//获取应用实例
 const app = getApp()
 
 Page({
-  data: {
-    bgmlist: [],
-    serverUrl: '',
-    videoParms: ''
+  data:{
+    bgmlist:[],
+    serverUrl:'',
+    videoParams:''
   },
-
-  //页面加载
-  onLoad: function(parms){
-    // console.log(parms);
+  onLoad: function(params){
+    // console.log(params);
     var me=this;
     me.setData({
-      videoParms: parms
+      videoParams: params
     });
-    var serverUrl = app.serverUrl;
     wx.showLoading({
-      title: '玩命加载中..',
+      title: '玩命加载中~~'
     })
+    var serverUrl=app.serverUrl;
     wx.request({
-      url: serverUrl +'/queryBgm',
+      url: serverUrl +"/queryBgm",
       method: 'POST',
       header: {
         'content-type': 'application/json'
       },
       success: function(res){
-        // console.log(res)
         wx.hideLoading();
+        console.log(res);
         var data=res.data;
         if(data.status==200){
           me.setData({
-            serverUrl: serverUrl,
-            bgmlist: data.data
+            bgmlist: data.data,
+            serverUrl: serverUrl
           })
         }
-      },
-      fail: function(){
-        wx.hideLoading();
-        wx.showToast({
-          title: '哎呀，网络出错了~',
-          icon: 'none',
-          duration: 2000
-        })
       }
     })
   },
 
   //上传视频
-  uploadVideo: function(res){
+  uploadVideo: function(e){
     var me=this;
-    // console.log(res)
-    var bgmId = res.detail.value.bgmRadioId;
-    var desc = res.detail.value.desc;
-    var videoSeconds=me.data.videoParms.duration;
-    var videoUrl = me.data.videoParms.videoUrl;
-    var videoHeight = me.data.videoParms.height;
-    var videoWidth = me.data.videoParms.width;
-    var userInfo = app.getGlobalUserInfo();
+    var bgmId = e.detail.value.bgmRadioId;
+    // console.log('背景音乐Id'+bgmId);
+    var desc = e.detail.value.desc;
+    var duration = me.data.videoParams.duration;
+    var tempCoverUrl = me.data.videoParams.tempCoverUrl;
+    var tempVideoUrl = me.data.videoParams.tempVideoUrl;
+    var tempheight = me.data.videoParams.tempheight;
+    var tempwidth = me.data.videoParams.tempwidth;
+    var user = app.getGlobalUserInfo();
     wx.showLoading({
       title: '正在上传...',
     });
     wx.uploadFile({
-      url: app.serverUrl +'/uploadVideo',
-      formData: {
-        userId: userInfo.id,
+      url: app.serverUrl +"/uploadVideo",
+      formData:{
+        userId: user.id,
         bgmId: bgmId,
         desc: desc,
-        videoSeconds: videoSeconds,
-        videoWidth: videoWidth,
-        videoHeight: videoHeight
+        videoSeconds: duration,
+        videoWidth: tempwidth,
+        videoHeight: tempheight
       },
-      filePath: videoUrl,
+      filePath: tempVideoUrl,
       name: 'file',
       header: {
-        'content-type': 'application/form-data'
+        'content-type': 'application/json'
       },
       success: function(res){
-        var data=JSON.parse(res.data);
+        console.log(res)
+        var data = JSON.parse(res.data);
+        // debugger;
         if(data.status==200){
+
           wx.hideLoading();
           wx.showToast({
             title: '上传成功~~',
             icon: 'success',
             duration: 2000
           });
-          //回退一页
           wx.navigateBack({
             delta: 1
           })
+          //视频上传成功后上传视频封面(pc端支持，但手机端不支持)
+          // wx.uploadFile({
+          //   url: app.serverUrl + '/video/uploadVideoCover',
+          //   formData: {
+          //     userId: app.useInfo.id,
+          //     videoId: data.data
+          //   },
+          //   filePath: tempCoverUrl,
+          //   name: 'file',
+          //   header: {
+          //     'content-type': 'application/json'
+          //   },
+          //   success: function (res) {
+          //   var data2=JSON.parse(res.data);
+          //    if(data2.status==200){
+          //      wx.hideLoading();
+          //      wx.showToast({
+          //        title: '上传成功~~',
+          //        icon: 'none',
+          //        duration: 2000
+          //      });
+          //      wx.navigateBack({
+          //        delta: 1
+          //      })
+          //    }else{
+          //      wx.hideLoading();
+          //      wx.showToast({
+          //        title: data2.msg,
+          //        icon: 'loading',
+          //        duration: 2000
+          //      })
+          //    }
+          //   }
+          // })
         }else{
           wx.hideLoading();
           wx.showToast({
             title: '上传失败( ╯□╰ )',
-            icon: 'none',
+            icon: 'loading',
             duration: 2000
           })
         }
+        
       },
       fail: function(){
         wx.hideLoading();
         wx.showToast({
           title: '出错了呢...',
-          icon: 'none',
+          icon: 'loading',
           duration: 2000
         })
       }
     })
   }
-
-  
-
 })

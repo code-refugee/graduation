@@ -4,8 +4,8 @@
 style='width:100%;height:100%'
 id='myVideo'
 src='{{src}}'
-controls='{{false}}'
-loop='{{true}}'
+controls='{{true}}'
+loop='{{false}}'
 autoplay='{{true}}'
 objectFit='{{cover}}'
 >

@@ -4,7 +4,7 @@
 
 
      <view style='width:{{screenWidth}}px;height:210px;' class='back-img'> 
-        <image src='{{serverUrl}}{{item.coverPath}}' style='width:{{screenWidth}}px;height:210px;' mode="aspectFit" bindtap='showVideoInfo' data-arrindex='{{index}}'></image>
+        <image src='{{serverUrl}}{{item.coverPath}}' style='width:{{screenWidth}}px;height:210px;' mode="aspectFit" bindtap='showVideoInfo' data-arrindex='{{index}}'></image><!--这里的index是for循环中数组的下标-->
      </view> 
 
 

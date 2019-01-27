@@ -12,6 +12,7 @@ Page({
     searchValue: ' '
   },
   onLoad: function(params){
+    
     var me=this;
     var screenWidth=wx.getSystemInfoSync().screenWidth;
     me.setData({
@@ -24,6 +25,9 @@ Page({
     var isSaveRecord=params.isSaveRecord;
     if(isSaveRecord==null||isSaveRecord==''||isSaveRecord==undefined){
       isSaveRecord=0;
+    }
+    if(searchValue==undefined){
+      searchValue=''
     }
     me.setData({
       searchValue: searchValue
@@ -60,10 +64,11 @@ Page({
 
 //展示视频信息
   showVideoInfo: function(e){
+    console.log(e)
     var me=this;
     var videoList = me.data.videoList;
     var arrindex=e.target.dataset.arrindex;
-    //对象是无法通过页面跳转传到下一个页面的
+    //对象是无法通过页面跳转传到下一个页面的，得变为json数据
     var videoInfo = JSON.stringify(videoList[arrindex]);
     wx.redirectTo({
       url: '../videoInfo/videoInfo?videoInfo=' + videoInfo,
@@ -74,7 +79,7 @@ Page({
   getVideoList: function (page, isSaveRecord){
     var me=this;
     wx.request({
-      url: app.serverUrl + '/video/queryAll?page=' + page + '&isSaveRecords='+isSaveRecord,
+      url: app.serverUrl + '/quarryAll?page=' + page + '&isSaveRecords='+isSaveRecord,
       method: 'POST',
       data:{
         videoDesc: me.data.searchValue
@@ -100,11 +105,11 @@ Page({
           //展示页面(将原来的和拿到的视频列表拼接)
           var videoList = me.data.videoList;
 
-          var queryList = res.data.data.result;
+          var queryList = res.data.data.content;
           me.setData({
             videoList: videoList.concat(queryList),
             page: page,
-            totalPage: res.data.data.pages
+            totalPage: res.data.data.page
           });
           // console.log(me.data.videoList)
         }
@@ -112,7 +117,7 @@ Page({
       },
       fail: function(){
         wx.showToast({
-          title: '出错了呢~~',
+          title: '，哎呀，网络出错了~',
           icon: 'none',
           duration: 2000
         })

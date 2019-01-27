@@ -44,7 +44,7 @@ Page({
       fail: function(){
         wx.hideLoading();
         wx.showToast({
-          title: '哎呀，网络出错了..',
+          title: '哎呀，网络出错了~',
           icon: 'loading',
           duration: 2000
         })
@@ -87,7 +87,7 @@ Page({
       fail: function(){
         wx.hideLoading();
         wx.showToast({
-          title: '哎呀，网络出错了..',
+          title: '哎呀，网络出错了~',
           icon: 'loading',
           duration: 2000
         })
@@ -148,11 +148,18 @@ Page({
           },
           fail: function(){
             wx.showToast({
-              title: '哎呀，网络出错了..',
+              title: '哎呀，网络出错了~',
               icon: "loading",
               duration: 2000
             })
           }
+        })
+      },
+      fail: function(){
+        wx.showToast({
+          title: '出错了呢~',
+          icon: 'none',
+          duration: 2000
         })
       }
     })

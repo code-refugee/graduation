@@ -34,6 +34,14 @@ Page({
             serverUrl: serverUrl
           })
         }
+      },
+      fail: function(){
+        wx.hideLoading();
+        wx.showToast({
+          title: '哎呀，网络出错了~',
+          icon: 'none',
+          duration: 2000    
+        })
       }
     })
   },

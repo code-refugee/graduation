@@ -8,13 +8,13 @@ Page({
   },
 
 onLoad: function(params){
-  // var me=this;
-  // var redirtUrl = params.redirtUrl;
-  // redirtUrl = redirtUrl.replace(/#/g,"?");
-  // redirtUrl = redirtUrl.replace(/@/g, "=");
-  // me.setData({
-  //   redirtUrl: redirtUrl
-  // })
+  var me=this;
+  var redirtUrl = params.redirtUrl;
+  redirtUrl = redirtUrl.replace(/#/g,"?");
+  redirtUrl = redirtUrl.replace(/@/g, "=");
+  me.setData({
+    redirtUrl: redirtUrl
+  })
 },
 
   doLogin: function(e){
@@ -87,9 +87,9 @@ onLoad: function(params){
         fail: function(){
           wx.hideLoading();
           wx.showToast({
-            title: '请求超时...',
+            title: '请求超时',
             icon: 'loading',
-            duration: 2000
+            duration: 2000  
           })
         }
 

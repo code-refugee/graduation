@@ -11,6 +11,7 @@ import com.yuhangTao.utils.PageResult;
 import io.swagger.annotations.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /*对相关视频业务进行操作*/
@@ -148,5 +151,11 @@ public class VideoBusinessController extends BasicController{
         return IMoocJSONResult.ok(result);
     }
 
+    @GetMapping("/queryHot")
+    @ApiOperation(value = "热搜词查询",notes = "热搜词查询的接口")
+    public IMoocJSONResult queryHot(){
+        List<String> contents=videoService.queryHot();
+        return IMoocJSONResult.ok(contents);
+    }
 
 }

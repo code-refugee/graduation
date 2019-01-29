@@ -71,4 +71,9 @@ public class VideoServiceImpl implements VideoService {
         pageResult.setContent(result);
         return pageResult;
     }
+
+    @Override
+    public List<String> queryHot() {
+        return searchRecordsMapper.queryHot();
+    }
 }

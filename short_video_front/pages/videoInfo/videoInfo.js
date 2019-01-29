@@ -10,7 +10,7 @@ Page({
     sec: '',
     videoInfo: []
   },
-  videoCtx: {},
+  videoCtx: {},//用来保存video的对象
   onLoad: function(params){
     var me=this;
     //获取上一个页面传入的数据(注意将字符串转换为JSON对象)
@@ -32,11 +32,11 @@ Page({
   } ,
   onShow: function(){
     var me=this;
-    me.videoCtx.play();
+    me.videoCtx.play();//页面展示时播放视频
   },
   onHide: function(){
     var me = this;
-    me.videoCtx.pause();
+    me.videoCtx.pause();//页面隐藏时暂停视频
   },
   //点击搜索
   showSearch: function(){

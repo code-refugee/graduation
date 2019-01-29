@@ -1,9 +1,9 @@
 {
   "pages":[
     "pages/index/index",
-    "pages/chooseBgm/chooseBgm",
-    "pages/userLogin/login",
     "pages/videoInfo/videoInfo",
+    "pages/userLogin/login",
+    "pages/chooseBgm/chooseBgm",
     "pages/userRegist/regist",
     "pages/mine/mine",
     "pages/searchView/searchView"

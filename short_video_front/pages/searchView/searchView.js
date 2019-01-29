@@ -8,8 +8,8 @@ Page({
   onLoad: function () {
     var that = this;
     wx.request({
-      url: app.serverUrl +"/video/queryHot",
-      method: 'POST',
+      url: app.serverUrl +"/queryHot",
+      method: 'GET',
       header: {
         'content-type':'application/json'
       },
@@ -49,8 +49,8 @@ Page({
   myGobackFunction: function () {
     // do your job here
     // 示例：返回
-    wx.redirectTo({
-      url: '../videoInfo/videoInfo'
+    wx.navigateBack({
+      delta: 1
     })
   }
 })

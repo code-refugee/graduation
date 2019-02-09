@@ -1,5 +1,6 @@
 D:\code\graduation\short_video_back\short-video-root-mini-api\src\main\java\com\yuhangTao\controller\RegistLoginController.java
 D:\code\graduation\short_video_back\short-video-root-mini-api\src\main\java\com\yuhangTao\controller\VideoBusinessController.java
+D:\code\graduation\short_video_back\short-video-root-mini-api\src\main\java\com\yuhangTao\interceptor\MiniInterceptor.java
 D:\code\graduation\short_video_back\short-video-root-mini-api\src\main\java\com\yuhangTao\Application.java
 D:\code\graduation\short_video_back\short-video-root-mini-api\src\main\java\com\yuhangTao\controller\BasicController.java
 D:\code\graduation\short_video_back\short-video-root-mini-api\src\main\java\com\yuhangTao\controller\BgmBusinessController.java

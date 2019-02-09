@@ -109,7 +109,7 @@ Page({
           me.setData({
             videoList: videoList.concat(queryList),
             page: page,
-            totalPage: res.data.data.page
+            totalPage: res.data.data.allPages
           });
           // console.log(me.data.videoList)
         }

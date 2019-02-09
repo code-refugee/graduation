@@ -18,6 +18,8 @@ import com.yuhangTao.pojo.Users;
 
  * 5.查询用户信息
 
+ * 6.查询用户是否喜欢该视频
+
  */
 public interface UserService {
 
@@ -35,4 +37,7 @@ public interface UserService {
 
     //5
     Users queryUserInfo(String userId);
+
+    //6
+    boolean isUserLikeVideo(String userId,String videoId);
 }

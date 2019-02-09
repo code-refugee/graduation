@@ -1,7 +1,10 @@
 package com.yuhangTao;
 
 
+import com.yuhangTao.interceptor.MiniInterceptor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -19,5 +22,17 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 //加这句是因为我们要访问swagger文件，而它所发布的目录是这样的
                 .addResourceLocations("classpath:/META-INF/resources/")
                 .addResourceLocations("file:f:/graduation/userupload/");
+    }
+
+    /*将拦截器注册到spring中*/
+    @Bean
+    public MiniInterceptor getInterceptor(){
+        return new MiniInterceptor();
+    }
+
+    /*先注册拦截器。然后添加所要拦截的controller*/
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(getInterceptor()).addPathPatterns("/logout","/uploadface");
     }
 }

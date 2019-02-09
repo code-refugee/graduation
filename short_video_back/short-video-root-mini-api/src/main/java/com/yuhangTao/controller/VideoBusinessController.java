@@ -151,11 +151,39 @@ public class VideoBusinessController extends BasicController{
         return IMoocJSONResult.ok(result);
     }
 
+    /*獲取熱搜詞*/
     @GetMapping("/queryHot")
     @ApiOperation(value = "热搜词查询",notes = "热搜词查询的接口")
     public IMoocJSONResult queryHot(){
         List<String> contents=videoService.queryHot();
         return IMoocJSONResult.ok(contents);
     }
+
+    /*用戶喜歡當前視頻*/
+    @PostMapping("/userLike")
+    @ApiOperation(value = "用戶喜歡當前視頻",notes="用戶喜歡當前視頻的接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId",value = "用戶Id",required = true,dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "videoId",value = "視頻Id",required = true,dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "videoCreateId",value = "視頻創造者Id",required = true,dataType = "String",paramType = "query"),
+    })
+    public IMoocJSONResult userLikeVideo(String userId, String videoId, String videoCreateId){
+        videoService.userLikeVideo(userId,videoId,videoCreateId);
+        return IMoocJSONResult.ok();
+    }
+
+    /*用戶不喜歡當前視頻*/
+    @PostMapping("/userUnLike")
+    @ApiOperation(value = "用戶不喜歡當前視頻",notes="用戶不喜歡當前視頻的接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId",value = "用戶Id",required = true,dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "videoId",value = "視頻Id",required = true,dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "videoCreateId",value = "視頻創造者Id",required = true,dataType = "String",paramType = "query"),
+    })
+    public IMoocJSONResult userDisLikeVideo(String userId, String videoId, String videoCreateId){
+        videoService.userDisLikeVideo(userId,videoId,videoCreateId);
+        return IMoocJSONResult.ok();
+    }
+
 
 }

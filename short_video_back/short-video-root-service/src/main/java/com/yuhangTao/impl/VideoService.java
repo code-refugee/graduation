@@ -16,4 +16,10 @@ public interface VideoService {
 
     /*查询热搜词*/
     List<String> queryHot();
+
+    /*用戶喜歡視頻*/
+    void userLikeVideo(String userId,String videoId,String videoCreateId);
+
+    /*用戶不喜歡視頻*/
+    void userDisLikeVideo(String userId,String videoId,String videoCreateId);
 }

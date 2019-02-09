@@ -14,4 +14,5 @@
     <result column="follow_counts" jdbcType="INTEGER" property="followCounts" />
     <result column="receive_like_counts" jdbcType="INTEGER" property="receiveLikeCounts" />
   </resultMap>
+
 </mapper>

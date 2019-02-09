@@ -3,11 +3,10 @@ package com.yuhangTao.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.yuhangTao.impl.VideoService;
-import com.yuhangTao.mapper.SearchRecordsMapper;
-import com.yuhangTao.mapper.VideosCustomMapper;
-import com.yuhangTao.mapper.VideosMapper;
+import com.yuhangTao.mapper.*;
 import com.yuhangTao.org.n3r.idworker.Sid;
 import com.yuhangTao.pojo.SearchRecords;
+import com.yuhangTao.pojo.UsersLikeVideos;
 import com.yuhangTao.pojo.Videos;
 import com.yuhangTao.utils.PageResult;
 import com.yuhangTao.vo.VideosVO;
@@ -15,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
 import java.util.UUID;
@@ -26,10 +26,16 @@ public class VideoServiceImpl implements VideoService {
     private VideosMapper videosMapper;
 
     @Autowired
+    private UsersMapper usersMapper;
+
+    @Autowired
     private SearchRecordsMapper searchRecordsMapper;
 
     @Autowired
     private VideosCustomMapper videosCustomMapper;
+
+    @Autowired
+    private UsersLikeVideosMapper usersLikeVideosMapper;
 
     @Autowired
     private Sid sid;
@@ -72,8 +78,51 @@ public class VideoServiceImpl implements VideoService {
         return pageResult;
     }
 
+    /*
+    * 查詢熱搜
+    * */
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public List<String> queryHot() {
         return searchRecordsMapper.queryHot();
+    }
+
+    /*
+    * 用戶喜歡視頻
+    * */
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void userLikeVideo(String userId, String videoId, String videoCreateId) {
+        //1.保存用戶和喜歡的視頻
+        String id=sid.nextShort();
+        UsersLikeVideos usersLikeVideos=new UsersLikeVideos();
+        usersLikeVideos.setId(id);
+        usersLikeVideos.setUserId(userId);
+        usersLikeVideos.setVideoId(videoId);
+        usersLikeVideosMapper.insert(usersLikeVideos);
+        //2.視頻創造者受喜歡的數量纍加
+        usersMapper.addReceiveLikeCounts(videoCreateId);
+        //3.該視頻受喜歡數量纍加
+        videosCustomMapper.addVideoLikeCounts(videoId);
+
+    }
+
+    /*
+     * 用戶不喜歡視頻
+     * */
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void userDisLikeVideo(String userId, String videoId, String videoCreateId) {
+        //1.刪除用戶和用戶喜歡的視頻
+        Example example=new Example(UsersLikeVideos.class);
+        Example.Criteria criteria=example.or();
+        criteria.andEqualTo("userId",userId);
+        criteria.andEqualTo("videoId",videoId);
+        usersLikeVideosMapper.deleteByExample(example);
+        //2.視頻創造者受喜歡的數量減一
+        usersMapper.reduceReceiveLikeCounts(videoCreateId);
+        //3.該視頻受喜歡數量減一
+        videosCustomMapper.reduceVideoLikeCounts(videoId);
+
     }
 }

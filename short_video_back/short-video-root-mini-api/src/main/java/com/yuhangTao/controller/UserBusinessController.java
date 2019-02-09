@@ -3,6 +3,7 @@ package com.yuhangTao.controller;
 import com.yuhangTao.impl.UserService;
 import com.yuhangTao.pojo.Users;
 import com.yuhangTao.utils.IMoocJSONResult;
+import com.yuhangTao.vo.PublisherVO;
 import com.yuhangTao.vo.UsersVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -108,6 +109,22 @@ public class UserBusinessController extends BasicController{
         UsersVO usersVO=new UsersVO();
         BeanUtils.copyProperties(result,usersVO);
         return IMoocJSONResult.ok(usersVO);
+    }
+
+    /*该接口用于查询视频发布者的信息
+    * 同时还能查询用户是否点赞过该视频*/
+    @PostMapping("/queryPublisher")
+    public IMoocJSONResult queryPublisher(String loginUserId,String videoId,String publisherId){
+        if(StringUtils.isBlank(publisherId))
+            return IMoocJSONResult.errorMsg("必要信息丢失");
+        Users user=userService.queryUserInfo(publisherId);
+        boolean isuserLikeVideo=userService.isUserLikeVideo(loginUserId,videoId);
+        UsersVO usersVO=new UsersVO();
+        BeanUtils.copyProperties(user,usersVO);
+        PublisherVO publisherVO=new PublisherVO();
+        publisherVO.setUsersVO(usersVO);
+        publisherVO.setUserLikeVideo(isuserLikeVideo);
+        return IMoocJSONResult.ok(publisherVO);
     }
 
 

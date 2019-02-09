@@ -29,3 +29,4 @@ com\yuhangTao\utils\RedisOperator.class
 com\yuhangTao\org\n3r\idworker\strategy\DefaultRandomCodeStrategy.class
 com\yuhangTao\org\n3r\idworker\InvalidSystemClock.class
 com\yuhangTao\org\n3r\idworker\utils\IPv4Utils.class
+com\yuhangTao\utils\JsonUtils.class

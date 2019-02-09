@@ -10,8 +10,13 @@ Page({
 onLoad: function(params){
   var me=this;
   var redirtUrl = params.redirtUrl;
-  redirtUrl = redirtUrl.replace(/#/g,"?");
-  redirtUrl = redirtUrl.replace(/@/g, "=");
+  if (redirtUrl == null || redirtUrl == '' || redirtUrl==undefined){
+    redirtUrl='';
+  }else{
+    //将传过来的参数中的#和@改为？和=
+    redirtUrl = redirtUrl.replace(/#/g, "?");
+    redirtUrl = redirtUrl.replace(/@/g, "=");
+  }
   me.setData({
     redirtUrl: redirtUrl
   })
@@ -63,6 +68,9 @@ onLoad: function(params){
             //将用户信息保存到本地缓存中去
             app.setGlobalUserInfo(res.data.data);
             var redirtUrl = me.data.redirtUrl
+            /*这段代码的目的是当我们在观看视频时，若用户点击上传视频，但此时用户
+            并未登录，用户跳转至登录界面，当用户登录时不会跳转到个人信息页面，而是
+            跳转到刚刚观看视频的页面*/
             if (redirtUrl != null && redirtUrl != undefined && redirtUrl!=''){
               wx.redirectTo({
                 url: redirtUrl

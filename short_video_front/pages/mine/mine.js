@@ -19,7 +19,7 @@ Page({
       url: app.serverUrl +"/query?userId="+useInfo.id,
       method: 'GET',
       header: {
-        'content-type': 'application/json'
+        'content-type': 'application/json',
       },
       success: function(res){
         wx.hideLoading();
@@ -39,7 +39,7 @@ Page({
             receiveLikeCounts: userInfo.receiveLikeCounts,
             nickname: userInfo.nickname
           })
-        }
+        } 
       },
       fail: function(){
         wx.hideLoading();

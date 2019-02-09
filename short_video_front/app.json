@@ -12,7 +12,7 @@
   "window":{
     "backgroundTextStyle":"light",
     "navigationBarBackgroundColor": "#fff",
-    "navigationBarTitleText": "小宇短视频",
+    "navigationBarTitleText": "小宇快看",
     "navigationBarTextStyle":"black"
   },
   "debug": true

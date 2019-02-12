@@ -5,10 +5,7 @@ import com.yuhangTao.pojo.Users;
 import com.yuhangTao.utils.IMoocJSONResult;
 import com.yuhangTao.vo.PublisherVO;
 import com.yuhangTao.vo.UsersVO;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.annotations.*;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -94,8 +91,13 @@ public class UserBusinessController extends BasicController{
 
     @GetMapping("/query")
     @ApiOperation(value = "查询用户信息",notes = "查询用户信息的接口")
-    @ApiImplicitParam(name = "userId",value = "用户Id",required = true,dataType = "String",paramType = "query")
-    public IMoocJSONResult queryUserInfo(String userId){
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId",value = "用户Id",required = true,dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "fanId",value = "粉丝Id",required = false,dataType = "String",paramType = "query")
+    })
+
+
+    public IMoocJSONResult queryUserInfo(String userId,String fanId){
 
         if(StringUtils.isBlank(userId))
             return IMoocJSONResult.errorMsg("用户Id不能为空");
@@ -108,12 +110,19 @@ public class UserBusinessController extends BasicController{
          * 其实你也可以用result.setPassword("")然后返回result*/
         UsersVO usersVO=new UsersVO();
         BeanUtils.copyProperties(result,usersVO);
+        usersVO.setFollow(userService.queryIsFollow(userId,fanId));
         return IMoocJSONResult.ok(usersVO);
     }
 
     /*该接口用于查询视频发布者的信息
     * 同时还能查询用户是否点赞过该视频*/
     @PostMapping("/queryPublisher")
+    @ApiOperation(value = "查询视频发布者信息",notes = "查询视频发布者信息的接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "loginUserId",value = "用户Id",required = true,dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "videoId",value = "视频Id",required = true,dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "publisherId",value = "发布者Id",required = true,dataType = "String",paramType = "query"),
+    })
     public IMoocJSONResult queryPublisher(String loginUserId,String videoId,String publisherId){
         if(StringUtils.isBlank(publisherId))
             return IMoocJSONResult.errorMsg("必要信息丢失");
@@ -127,5 +136,31 @@ public class UserBusinessController extends BasicController{
         return IMoocJSONResult.ok(publisherVO);
     }
 
+    /*用户关注视频发布者*/
+    @PostMapping("/beyourfans")
+    @ApiOperation(value = "关注",notes = "关注的接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "publisherId",value = "视频发布者Id",required = true,dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "userId",value = "用户Id",required = true,dataType = "String",paramType = "query"),
+    })
+    public IMoocJSONResult beYouFans(String publisherId,String userId){
+        if(StringUtils.isBlank(publisherId)||StringUtils.isBlank(userId))
+            return IMoocJSONResult.errorMsg("必要信息丢失");
+        userService.followPublisher(publisherId,userId);
+        return IMoocJSONResult.ok();
+    }
 
+    /*用户不再关注视频发布者*/
+    @PostMapping("/notyourfans")
+    @ApiOperation(value = "取消关注",notes = "取消关注的接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "publisherId",value = "视频发布者Id",required = true,dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "userId",value = "用户Id",required = true,dataType = "String",paramType = "query"),
+    })
+    public IMoocJSONResult notYouFans(String publisherId,String userId){
+        if(StringUtils.isBlank(publisherId)||StringUtils.isBlank(userId))
+            return IMoocJSONResult.errorMsg("必要信息丢失");
+        userService.deleteFollow(publisherId,userId);
+        return IMoocJSONResult.ok();
+    }
 }

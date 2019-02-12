@@ -4,26 +4,70 @@ const app = getApp()
 
 Page({
   data:{
-    faceUrl: "../resource/images/noneface.png"
+    faceUrl: "../resource/images/noneface.png",
+    isMe: true,
+    isFollow: false,
+    publisherId: '',
+    fansCounts: '',
+    serverUrl: app.serverUrl,
+    userId: '',
+
+    videoSelClass: 'video-info',
+    isSelectedWork: 'video-info-selected',
+    isSelectedLike: '',
+    isSelectedFollow: '',
+
+    myWorkFalg: false,
+    myLikesFalg: true,
+    myFollowFalg: true,
+
+    myVideoList: [],
+    likeVideoList: [],
+    followVideoList: [],
+
+    //查询第几页
+    myVideoPage: 1,
+    likeVideoPage: 1,
+    followVideoPage: 1,
+
+    //数据库总共含有几页
+    myVideoTotal: 1,
+    likeVideoTotal: 1,
+    followVideoTotal: 1
   },
 
   //加载页面
-  onLoad: function(){
+  onLoad: function(params){
+    // console.log(params)
     var me=this;
     //从缓存中获取用户信息
     var useInfo = app.getGlobalUserInfo();
+    var publisherId = params.publisherId;
+    var id = useInfo.id;
+    if (publisherId != null && publisherId != '' && publisherId !=undefined){
+      if (id != publisherId){
+        id = publisherId;
+        me.setData({
+          isMe: false,
+          publisherId: publisherId,
+        })
+      }
+    }
+    me.setData({
+      userId: id//等会在作品、收藏、关注里查询视频时有用
+    })
     wx.showLoading({
       title: '玩命加载中...',
     });
     wx.request({
-      url: app.serverUrl +"/query?userId="+useInfo.id,
+      url: app.serverUrl + "/query?userId=" + id + '&fanId=' + useInfo.id,
       method: 'GET',
       header: {
         'content-type': 'application/json',
       },
       success: function(res){
         wx.hideLoading();
-        console.log(res);
+        // console.log(res);
         if(res.data.status==200){
           var userInfo=res.data.data;
           var faceUrl = "../resource/images/noneface.png";//默认
@@ -32,12 +76,14 @@ Page({
             faceUrl = app.serverUrl + userInfo.faceImage;//静态资源访问
           }
           //设置属性值
+          // bebugger;
           me.setData({
             faceUrl: faceUrl,
             fansCounts: userInfo.fansCounts,
             followCounts: userInfo.followCounts,
             receiveLikeCounts: userInfo.receiveLikeCounts,
-            nickname: userInfo.nickname
+            nickname: userInfo.nickname,
+            isFollow: userInfo.follow
           })
         } 
       },
@@ -49,7 +95,8 @@ Page({
           duration: 2000
         })
       }
-    })
+    });
+    this.doSelectWork();
   },
 
   //用户注销
@@ -157,7 +204,7 @@ Page({
       },
       fail: function(){
         wx.showToast({
-          title: '出错了呢~',
+          title: '已取消~',
           icon: 'none',
           duration: 2000
         })
@@ -212,5 +259,356 @@ Page({
         })
       }
     })
+  },
+
+  //用户点击关注或取消关注
+  followMe: function(params){
+    // console.log(params);
+    var me=this;
+    var userInfo = app.getGlobalUserInfo();
+    var publisherId = me.data.publisherId;
+    var userId = userInfo.id;
+    var followtype = params.target.dataset.followtype;
+    var toUrl='';
+    if(followtype=='0'){
+      toUrl = '/notyourfans?publisherId=' + publisherId + '&userId=' + userId;
+    }else{
+      toUrl = '/beyourfans?publisherId=' + publisherId + '&userId=' + userId;
+    }
+    wx.showLoading({
+      title: '请等待..',
+    })
+    wx.request({
+      url: app.serverUrl + toUrl,
+      method: 'POST',
+      header: {
+        "content-type": "application/json"
+      },
+      success: function(res){
+        console.log(res);
+        wx.hideLoading();
+        if(res.data.status==200){
+          me.setData({
+            isFollow: !me.data.isFollow
+          })
+          if (followtype == '0') {
+            me.setData({
+              fansCounts: --me.data.fansCounts
+            })
+            wx.showToast({
+              title: '已取消关注',
+              icon: 'none',
+              duration: 2000
+            })
+          } else {
+            me.setData({
+              fansCounts: ++me.data.fansCounts
+            })
+            wx.showToast({
+              title: '关注成功',
+              icon: 'none',
+              duration: 2000
+            })
+          }
+        }else{
+          wx.showToast({
+            title: res.data.msg,
+            icon: 'none',
+            duration: 2000
+          })
+        }
+        
+      },
+      fail: function(){
+        wx.hideLoading();
+        wx.showToast({
+          title: '出错了呢~',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    })
+  },
+
+  //点击作品、收藏、或关注，实现相应的功能
+  doSelectWork: function(){
+    this.setData({
+      //选中时，改变相应的颜色
+      isSelectedWork: 'video-info-selected',
+      isSelectedLike: '',
+      isSelectedFollow: '',
+      //显示对应的view并隐藏其它两个
+      myWorkFalg: false,
+      myLikesFalg: true,
+      myFollowFalg: true,
+
+      //初始化所有值
+      myVideoList: [],
+      likeVideoList: [],
+      followVideoList: [],
+
+      myVideoPage: 1,
+      likeVideoPage: 1,
+      followVideoPage: 1,
+
+      myVideoTotal: 1,
+      likeVideoTotal: 1,
+      followVideoTotal: 1
+    })
+
+    this.getMyVideoList(1);
+  },
+
+  doSelectLike: function(){
+    this.setData({
+      isSelectedWork: '',
+      isSelectedLike: 'video-info-selected',
+      isSelectedFollow: '',
+
+      myWorkFalg: true,
+      myLikesFalg: false,
+      myFollowFalg: true,
+
+      myVideoList: [],
+      likeVideoList: [],
+      followVideoList: [],
+
+      myVideoPage: 1,
+      likeVideoPage: 1,
+      followVideoPage: 1,
+
+      myVideoTotal: 1,
+      likeVideoTotal: 1,
+      followVideoTotal: 1
+    })
+
+    this.getMyLikesList(1);
+  },
+
+  doSelectFollow: function(){
+    this.setData({
+      isSelectedWork: '',
+      isSelectedLike: '',
+      isSelectedFollow: 'video-info-selected',
+
+      myWorkFalg: true,
+      myLikesFalg: true,
+      myFollowFalg: false,
+
+      myVideoList: [],
+      likeVideoList: [],
+      followVideoList: [],
+
+      myVideoPage: 1,
+      likeVideoPage: 1,
+      followVideoPage: 1,
+
+      myVideoTotal: 1,
+      likeVideoTotal: 1,
+      followVideoTotal: 1
+    })
+
+    this.getMyFollowList(1);
+  },
+
+  //我发布的视频列表
+  getMyVideoList: function(page){
+    var me=this;
+
+    wx.showLoading({
+      title: '请等待..',
+    })
+    wx.request({
+      url: app.serverUrl + '/quarryAll?page=' + page,
+      method: 'POST',
+      data: {
+        userId: me.data.userId
+      },
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function(res){
+        wx.hideLoading();
+        // console.log(res);
+        if(res.data.status==200){
+          me.setData({
+            myVideoList: me.data.myVideoList.concat(res.data.data.content),
+            myVideoPage: res.data.data.page,
+            myVideoTotal: res.data.data.allPages
+          })
+        }else{
+          wx.showToast({
+            title: res.data.msg,
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      },
+      fail: function(){
+        wx.hideLoading();
+        wx.showToast({
+          title: '出错了呢~',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    })
+  },
+
+  //我点赞收藏的视频列表
+  getMyLikesList: function(page){
+    var me=this;
+    wx.showLoading({
+      title: '请等待..',
+    })
+    var userId = me.data.userId;
+    wx.request({
+      url: app.serverUrl + '/showMyLike?userId=' + userId +'&page='+page,
+      method: 'POST',
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function(res){
+        wx.hideLoading();
+        if (res.data.status == 200) {
+          me.setData({
+            likeVideoList: me.data.likeVideoList.concat(res.data.data.content),
+            likeVideoPage: res.data.data.page,
+            likeVideoTotal: res.data.data.allPages
+          })
+        } else {
+          wx.showToast({
+            title: res.data.msg,
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      },
+      fail: function(){
+        wx.hideLoading();
+        wx.showToast({
+          title: '出错了呢~',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    })
+  },
+
+  //我关注的人发表的视频
+  getMyFollowList: function(page){
+    var me=this;
+    wx.showLoading({
+      title: '请等待..',
+    })
+    var userId =me.data.userId;
+    wx.request({
+      url: app.serverUrl + '/showMyFollow?userId=' + userId +'&page='+page,
+      method: 'POST',
+      header: {
+        'content-type': 'application/json'
+      },
+      success: function (res) {
+        wx.hideLoading();
+        if (res.data.status == 200) {
+          me.setData({
+            followVideoList: me.data.followVideoList.concat(res.data.data.content),
+            followVideoPage: res.data.data.page,
+            followVideoTotal: res.data.data.allPages
+          })
+        } else {
+          wx.showToast({
+            title: res.data.msg,
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      },
+      fail: function () {
+        wx.hideLoading();
+        wx.showToast({
+          title: '出错了呢~',
+          icon: 'none',
+          duration: 2000
+        })
+      }
+    })
+  },
+
+  //播放视频
+  showVideo: function(e){
+    var me=this;
+    // console.log(e);
+    var index = e.target.dataset.arrindex;
+    var myWorkFalg = me.data.myWorkFalg;
+    var myLikesFalg = me.data.myLikesFalg;
+    var myFollowFalg = me.data.myFollowFalg;
+    var myVideoList = me.data.myVideoList;
+    var likeVideoList = me.data.likeVideoList;
+    var followVideoList = me.data.followVideoList;
+    var videoInfo = '';
+    if (!myWorkFalg){
+      videoInfo = JSON.stringify(myVideoList[index])
+    }
+    if (!myLikesFalg){
+      videoInfo = JSON.stringify(likeVideoList[index])
+    }
+    if (!myFollowFalg){
+      videoInfo = JSON.stringify(followVideoList[index])
+    }
+    wx.navigateTo({
+      url: '../videoInfo/videoInfo?videoInfo=' + videoInfo
+    })
+  },
+
+  //下拉刷新
+  onReachBottom: function(){
+    var me=this;
+
+    var myWorkFalg = me.data.myWorkFalg;
+    var myLikesFalg = me.data.myLikesFalg;
+    var myFollowFalg = me.data.myFollowFalg;
+
+    var myVideoPage = me.data.myVideoPage;
+    var likeVideoPage = me.data.likeVideoPage;
+    var followVideoPage = me.data.followVideoPage;
+
+    var myVideoTotal = me.data.myVideoTotal;
+    var likeVideoTotal = me.data.likeVideoTotal;
+    var followVideoTotal = me.data.followVideoTotal;
+    if (!myWorkFalg){
+      if (myVideoPage == myVideoTotal){
+        wx.showToast({
+          title: '已经没有更多了~~',
+          icon: 'none',
+          duration: 2000
+        })
+        return;
+      }
+      var page = myVideoPage+1;
+      me.getMyVideoList(page);
+    } else if (!myLikesFalg){
+      if (likeVideoPage == likeVideoTotal) {
+        wx.showToast({
+          title: '已经没有更多了~~',
+          icon: 'none',
+          duration: 2000
+        })
+        return;
+      }
+      var page = likeVideoPage + 1;
+      me.getMyLikesList(page);
+    } else if (!myFollowFalg){
+      if (followVideoPage == followVideoTotal) {
+        wx.showToast({
+          title: '已经没有更多了~~',
+          icon: 'none',
+          duration: 2000
+        })
+        return;
+      }
+      var page = followVideoPage + 1;
+      me.getMyFollowList(page);
+    }
   }
 })

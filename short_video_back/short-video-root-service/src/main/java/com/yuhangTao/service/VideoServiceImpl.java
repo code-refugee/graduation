@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class VideoServiceImpl implements VideoService {
@@ -57,7 +56,9 @@ public class VideoServiceImpl implements VideoService {
     @Transactional(propagation = Propagation.SUPPORTS)
     public PageResult quarryAllVideos(Videos video, Integer isSaveRecords, Integer page, Integer pageSize) {
 
+        //这里我们不仅可以查询符合描述的视频，还能查询发布者已发布的视频
         String desc=video.getVideoDesc();
+        String userId=video.getUserId();
         //如果要保存搜索记录则在数据库中保存
         if(isSaveRecords!=null&&isSaveRecords==1){
             String recordId= sid.nextShort();
@@ -68,7 +69,7 @@ public class VideoServiceImpl implements VideoService {
         }
         //进行分页查找
         PageHelper.startPage(page,pageSize);
-        List<VideosVO> result=videosCustomMapper.queryAllVideos(desc);
+        List<VideosVO> result=videosCustomMapper.queryAllVideos(desc,userId);
         PageInfo<VideosVO> info=new PageInfo<>(result);
         PageResult pageResult=new PageResult();
         pageResult.setPage(page);
@@ -76,6 +77,40 @@ public class VideoServiceImpl implements VideoService {
         pageResult.setTotal(info.getTotal());
         pageResult.setContent(result);
         return pageResult;
+    }
+
+    /*查询我点赞（收藏）的视频列表*/
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public PageResult queryMyLikeVideos(String userId, Integer page, Integer pageSize) {
+        //进行分页查找
+        PageHelper.startPage(page,pageSize);
+        List<VideosVO> result=videosCustomMapper.queryMyLikeVideos(userId);
+        PageInfo<VideosVO> info=new PageInfo<>(result);
+        PageResult pageResult=new PageResult();
+        pageResult.setPage(page);
+        pageResult.setAllPages(info.getPages());
+        pageResult.setTotal(info.getTotal());
+        pageResult.setContent(result);
+        return pageResult;
+
+    }
+
+    /*查询我关注的人的视频列表*/
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public PageResult queryMyFollowVideos(String userId, Integer page, Integer pageSize) {
+        //进行分页查找
+        PageHelper.startPage(page,pageSize);
+        List<VideosVO> result=videosCustomMapper.showMyFollowVideos(userId);
+        PageInfo<VideosVO> info=new PageInfo<>(result);
+        PageResult pageResult=new PageResult();
+        pageResult.setPage(page);
+        pageResult.setAllPages(info.getPages());
+        pageResult.setTotal(info.getTotal());
+        pageResult.setContent(result);
+        return pageResult;
+
     }
 
     /*
@@ -125,4 +160,5 @@ public class VideoServiceImpl implements VideoService {
         videosCustomMapper.reduceVideoLikeCounts(videoId);
 
     }
+
 }

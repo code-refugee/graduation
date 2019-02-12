@@ -151,6 +151,47 @@ public class VideoBusinessController extends BasicController{
         return IMoocJSONResult.ok(result);
     }
 
+    /**
+     *我收藏（点赞过的视频列表）
+     * @return
+     */
+    @PostMapping("/showMyLike")
+    @ApiOperation(value = "获取我点赞过的且未被禁播的视频",notes = "获取点赞（收藏）视频列表接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId",value = "用户Id",required = true,dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "page",value = "第几页",required = false,dataType = "Integer",paramType = "query")
+    })
+    public IMoocJSONResult showMyLike(String userId,Integer page){
+
+        if(StringUtils.isBlank(userId))
+            return IMoocJSONResult.errorMsg("必要信息丢失..");
+        if(page==null)
+            page = 1;
+        PageResult result=videoService.queryMyLikeVideos(userId,page,PAGESIZE);
+        return IMoocJSONResult.ok(result);
+    }
+
+    /**
+     * 我关注的人发布的视频
+     * @param userId
+     * @param page
+     * @return
+     */
+    @PostMapping("/showMyFollow")
+    @ApiOperation(value = "获取我关注的发布者且未被禁播的视频",notes = "获取我关注的发布者发布的视频列表接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "userId",value = "用户Id",required = true,dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "page",value = "第几页",required = false,dataType = "Integer",paramType = "query")
+    })
+    public IMoocJSONResult showMyFollow(String userId,Integer page){
+        if(StringUtils.isBlank(userId))
+            return IMoocJSONResult.errorMsg("必要信息丢失..");
+        if(page==null)
+            page=1;
+        PageResult result=videoService.queryMyFollowVideos(userId,page,PAGESIZE);
+        return IMoocJSONResult.ok(result);
+    }
+
     /*獲取熱搜詞*/
     @GetMapping("/queryHot")
     @ApiOperation(value = "热搜词查询",notes = "热搜词查询的接口")

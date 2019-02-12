@@ -1,9 +1,12 @@
 package com.yuhangTao.service;
 
 import com.yuhangTao.impl.UserService;
+import com.yuhangTao.mapper.UsersFansMapper;
 import com.yuhangTao.mapper.UsersLikeVideosMapper;
 import com.yuhangTao.mapper.UsersMapper;
+import com.yuhangTao.org.n3r.idworker.Sid;
 import com.yuhangTao.pojo.Users;
+import com.yuhangTao.pojo.UsersFans;
 import com.yuhangTao.pojo.UsersLikeVideos;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,6 +42,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UsersLikeVideosMapper usersLikeVideosMapper;
+
+    @Autowired
+    private UsersFansMapper usersFansMapper;
+
+    @Autowired
+    private Sid sid;
 
     /**
      *
@@ -126,5 +135,49 @@ public class UserServiceImpl implements UserService {
             return true;
         else
             return false;
+    }
+
+    /*用户关注视频发布者*/
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void followPublisher(String publisherId, String userId) {
+        String id=sid.nextShort();
+        UsersFans usersFans=new UsersFans();
+        usersFans.setId(id);
+        usersFans.setUserId(publisherId);
+        usersFans.setFanId(userId);
+        usersFansMapper.insert(usersFans);
+        usersMapper.addFansCounts(publisherId);
+        usersMapper.addFollowCounts(userId);
+    }
+
+    /*用户取消关注*/
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteFollow(String publisherId, String userId) {
+        Example example=new Example(UsersFans.class);
+        Example.Criteria criteria=example.or();
+        criteria.andEqualTo("userId",publisherId);
+        criteria.andEqualTo("fanId",userId);
+        usersFansMapper.deleteByExample(example);
+        usersMapper.reduceFansCounts(publisherId);
+        usersMapper.reduceFollowCounts(userId);
+    }
+
+    /*用户是否关注该视频发布者*/
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public boolean queryIsFollow(String publisherId, String userId) {
+
+        if(StringUtils.isBlank(publisherId)||StringUtils.isBlank(userId))
+            return false;
+        Example example=new Example(UsersFans.class);
+        Example.Criteria criteria=example.or();
+        criteria.andEqualTo("userId",publisherId);
+        criteria.andEqualTo("fanId",userId);
+        List<UsersFans> list=usersFansMapper.selectByExample(example);
+        if(list!=null&&list.size()>0)
+            return true;
+        return false;
     }
 }

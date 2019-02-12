@@ -1,6 +1,6 @@
 //app.js
 App({
-  serverUrl: "http://192.168.0.102:8081/short_video",
+  serverUrl: "http://192.168.0.103:8081/short_video",
   useInfo: null,
 
   setGlobalUserInfo: function(user){

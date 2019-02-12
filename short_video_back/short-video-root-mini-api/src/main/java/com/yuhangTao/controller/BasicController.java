@@ -25,7 +25,7 @@ public class BasicController {
     public static final String FFMPEGEXE="D:/工具/FFmpeg/ffmpeg/bin/ffmpeg.exe";
 
     //每次查询的数量
-    public static final Integer PAGESIZE=4;
+    public static final Integer PAGESIZE=6;
 
     //将视频上传至相应的文件夹下
     public void doCpopy(MultipartFile file, InputStream inputStream, FileOutputStream fileOutputStream, File toFile){

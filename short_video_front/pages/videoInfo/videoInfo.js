@@ -13,7 +13,9 @@ Page({
     publisher: '',
     serverUrl: ''
   },
+
   videoCtx: {},//用来保存video的对象
+
   onLoad: function(params){
     var me=this;
     //获取上一个页面传入的数据(注意将字符串转换为JSON对象)
@@ -170,6 +172,25 @@ Page({
         })
       }
     })
+  },
+
+  //显示视频上传者的信息
+  showPublisher: function(){
+    var me=this;
+    var userInfo = app.getGlobalUserInfo();
+    var publisher = me.data.publisher;
+    var realUrl = '../mine/mine#publisherId@' + publisher.id;
+    //先判断当前用户是否登录，如果为登录，先让他登录再查看发布者的信息
+    if(userInfo==null||userInfo==''||userInfo==undefined){
+      wx.navigateTo({
+        url: '../userLogin/login?redirtUrl=' + realUrl
+      })
+    }else{
+      wx.navigateTo({
+        url: '../mine/mine?publisherId=' + publisher.id,
+      })
+    }
+    
   }
 
 

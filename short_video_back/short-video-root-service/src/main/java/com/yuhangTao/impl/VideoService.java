@@ -22,4 +22,10 @@ public interface VideoService {
 
     /*用戶不喜歡視頻*/
     void userDisLikeVideo(String userId,String videoId,String videoCreateId);
+
+    /*查询我点赞（收藏）的视频列表*/
+    PageResult queryMyLikeVideos(String userId,Integer page,Integer pageSize);
+
+    /*查询我关注的人的视频列表*/
+    PageResult queryMyFollowVideos(String userId,Integer page,Integer pageSize);
 }

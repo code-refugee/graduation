@@ -51,3 +51,35 @@
   margin-top: 3px;
   float: right;
 }
+
+.follow{
+  margin-top: 3px;
+}
+
+.container-video{
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+  text-align: center;
+  border: solid 1px;
+  line-height: 30px;
+}
+
+.video-info{
+  width: 100%
+}
+
+.video-info-selected{
+  background-color: grey;
+}
+
+.container-video-list{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.videoImage{
+  width: 250rpx;
+  height: 180px;
+}

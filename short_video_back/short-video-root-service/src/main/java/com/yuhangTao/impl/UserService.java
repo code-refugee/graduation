@@ -20,6 +20,11 @@ import com.yuhangTao.pojo.Users;
 
  * 6.查询用户是否喜欢该视频
 
+ * 7.用户关注视频发布者
+
+ * 8.用户取消关注
+
+ * 9.用户是否关注该发布者
  */
 public interface UserService {
 
@@ -40,4 +45,13 @@ public interface UserService {
 
     //6
     boolean isUserLikeVideo(String userId,String videoId);
+
+    //7
+    void followPublisher(String publisherId,String userId);
+
+    //8
+    void deleteFollow(String publisherId,String userId);
+
+    //9
+    boolean queryIsFollow(String publisherId,String userId);
 }

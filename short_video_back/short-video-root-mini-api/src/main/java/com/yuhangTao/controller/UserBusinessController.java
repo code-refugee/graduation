@@ -2,6 +2,7 @@ package com.yuhangTao.controller;
 
 import com.yuhangTao.impl.UserService;
 import com.yuhangTao.pojo.Users;
+import com.yuhangTao.pojo.UsersReport;
 import com.yuhangTao.utils.IMoocJSONResult;
 import com.yuhangTao.vo.PublisherVO;
 import com.yuhangTao.vo.UsersVO;
@@ -12,6 +13,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -161,6 +163,14 @@ public class UserBusinessController extends BasicController{
         if(StringUtils.isBlank(publisherId)||StringUtils.isBlank(userId))
             return IMoocJSONResult.errorMsg("必要信息丢失");
         userService.deleteFollow(publisherId,userId);
+        return IMoocJSONResult.ok();
+    }
+
+    @PostMapping("/reportUser")
+    @ApiOperation(value = "举报用户",notes = "举报用户的接口")
+    public IMoocJSONResult reportUser(@RequestBody UsersReport usersReport){
+        //当用户被举报时，视频不会立马封禁，而是交由管理员处理
+        userService.saveReportReason(usersReport);
         return IMoocJSONResult.ok();
     }
 }

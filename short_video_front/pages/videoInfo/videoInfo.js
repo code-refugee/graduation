@@ -121,8 +121,10 @@ Page({
   showMine: function(){
     var user = app.getGlobalUserInfo();
     if(user==null||user==''||user==undefined){
+      var videoInfo = JSON.stringify(me.data.videoInfo);
+      var redirtUrl = '../videoInfo/videoInfo#videoInfo@' + videoInfo
       wx.navigateTo({
-        url: '../userLogin/login',
+        url: '../userLogin/login?redirtUrl=' + redirtUrl,
       })
     }else{
       wx.navigateTo({
@@ -191,6 +193,41 @@ Page({
       })
     }
     
+  },
+
+  //点击分享
+  shareMe: function(){
+    var me=this;
+    //使用微信官方提供的api
+    wx.showActionSheet({
+      itemList: ['下载视频','分享给好友','举报用户'],
+      success: function(res){
+        console.log(res.tapIndex)
+        var index = res.tapIndex;
+        if(index==0){
+          //下载视频
+        }else if(index==1){
+          //分享
+        }else{
+          //举报
+          var userInfo=app.getGlobalUserInfo();
+          //如果用户未登录则没有举报的权限
+          if(userInfo==null||userInfo==''||userInfo==undefined){
+            var videoInfo = JSON.stringify(me.data.videoInfo);
+            var redirtUrl = '../videoInfo/videoInfo#videoInfo@' + videoInfo
+            wx.navigateTo({
+              url: '../userLogin/login?redirtUrl=' + redirtUrl,
+            })
+          }else{
+            var publisherId = me.data.videoInfo.userId;
+            var videoId = me.data.videoInfo.id;
+            wx.navigateTo({
+              url: '../report/report?videoId=' + videoId + '&publisherId=' + publisherId,
+            })
+          }
+        }
+      }
+    })
   }
 
 

@@ -2,6 +2,7 @@ package com.yuhangTao.impl;
 
 
 import com.yuhangTao.pojo.Users;
+import com.yuhangTao.pojo.UsersReport;
 
 
 /**
@@ -25,6 +26,8 @@ import com.yuhangTao.pojo.Users;
  * 8.用户取消关注
 
  * 9.用户是否关注该发布者
+
+ * 10.保存举报信息
  */
 public interface UserService {
 
@@ -54,4 +57,7 @@ public interface UserService {
 
     //9
     boolean queryIsFollow(String publisherId,String userId);
+
+    //10
+    void saveReportReason(UsersReport usersReport);
 }

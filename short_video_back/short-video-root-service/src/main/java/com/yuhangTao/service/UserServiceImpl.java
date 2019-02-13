@@ -4,17 +4,21 @@ import com.yuhangTao.impl.UserService;
 import com.yuhangTao.mapper.UsersFansMapper;
 import com.yuhangTao.mapper.UsersLikeVideosMapper;
 import com.yuhangTao.mapper.UsersMapper;
+import com.yuhangTao.mapper.UsersReportMapper;
 import com.yuhangTao.org.n3r.idworker.Sid;
 import com.yuhangTao.pojo.Users;
 import com.yuhangTao.pojo.UsersFans;
 import com.yuhangTao.pojo.UsersLikeVideos;
+import com.yuhangTao.pojo.UsersReport;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Date;
 import java.util.List;
 
 /*
@@ -45,6 +49,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UsersFansMapper usersFansMapper;
+
+    @Autowired
+    private UsersReportMapper usersReportMapper;
 
     @Autowired
     private Sid sid;
@@ -179,5 +186,14 @@ public class UserServiceImpl implements UserService {
         if(list!=null&&list.size()>0)
             return true;
         return false;
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void saveReportReason(UsersReport usersReport) {
+        String id=sid.nextShort();
+        usersReport.setId(id);
+        usersReport.setCreateDate(new Date());
+        usersReportMapper.insertSelective(usersReport);
     }
 }

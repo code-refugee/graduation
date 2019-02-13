@@ -200,14 +200,57 @@ Page({
     var me=this;
     //使用微信官方提供的api
     wx.showActionSheet({
-      itemList: ['下载视频','分享给好友','举报用户'],
+      itemList: ['下载视频','分享至朋友圈','举报用户'],
       success: function(res){
         console.log(res.tapIndex)
         var index = res.tapIndex;
         if(index==0){
-          //下载视频
+          wx.showLoading({
+            title: '下载中..',
+          })
+          //下载视频(调用官方API即可)
+          wx.downloadFile({
+            url: app.serverUrl + me.data.videoInfo.videoPath,
+            success: function(res){
+              if (res.statusCode === 200){
+                wx.saveVideoToPhotosAlbum({
+                  filePath: res.tempFilePath,
+                  success: function(params){
+                    wx.hideLoading();
+                    wx.showToast({
+                      title: '下载成功~',
+                      icon: 'none',
+                      duration: 2000
+                    })
+                  },
+                  fail: function(){
+                    wx.hideLoading();
+                    wx.showToast({
+                      title: '保存失败..',
+                      icon: 'none',
+                      duration: 2000
+                    })
+                  }
+                })
+              }
+            },
+            fail: function(){
+              wx.hideLoading();
+              wx.showToast({
+                title: '下载失败..',
+                icon: 'none',
+                duration: 2000
+              })
+            }
+          })
+
         }else if(index==1){
           //分享
+          wx.showToast({
+            title: '暂不支持..',
+            icon: 'none',
+            duration: 2000
+          })
         }else{
           //举报
           var userInfo=app.getGlobalUserInfo();
@@ -228,6 +271,17 @@ Page({
         }
       }
     })
+  },
+
+  //设置转发（必须在page实现这个函数）
+  onShareAppMessage: function (res) {
+    var me = this;
+    var videoInfo = me.data.videoInfo;
+
+    return {
+      title: '我分享了短视频--' + videoInfo.videoDesc,
+      path: '../videoInfo/videoInfo?videoInfo=' + JSON.stringify(videoInfo)
+    }
   }
 
 

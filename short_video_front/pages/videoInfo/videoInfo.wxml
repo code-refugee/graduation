@@ -70,20 +70,31 @@ objectFit='{{cover}}'
 <!--使用了input组件，里面的各种属性可以去官网查看文档-->
 <view>
   <view class='saySthView'>
-    <input name='commentContent' class='saySth' placeholder='说点什么吧..' confirm-type='send'
+    <input name='commentContent' class='saySth' placeholder='{{say}}' confirm-type='send'
     bindconfirm='saveComment' focus='{{commentFocus}}' value='{{contentValue}}'
+    data-fathercommentid='{{fathercommentid}}'
+    data-touserid='{{touserid}}'
     ></input>
   </view>
 
   <block wx:for='{{commentsList}}'>
-    <view class='comments-all'>
+    <view class='comments-all' bindtap='replayUser'
+    data-fatherCommentId='{{item.id}}'
+    data-toNickName='{{item.nickname}}'
+    data-toUserId='{{item.fromUserId}}'>
       <view class='container-comments'>
         <image src='{{serverUrl}}{{item.faceImage}}' class='face-comments'></image>
         <view class='nickname-comments'>
           <label class='nickname-lbl'>@{{item.nickname}}</label>
           于
           <label class='date-lbl'>{{item.timeAgoStr}}</label>
+          <block wx:if='{{item.toNickName!=null}}'>
+          回复：
+          <label class='nickname-lbl'>{{item.toNickName}}</label>
+          </block>
+          <block wx:else>
           留言：
+          </block>
         </view>
       </view>
       <view class='comments-content'>{{item.comment}}</view>

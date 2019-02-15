@@ -12,12 +12,21 @@
     <result column="comment" jdbcType="LONGVARCHAR" property="comment" />
     <result column="face_image" jdbcType="VARCHAR" property="faceImage" />
     <result column="nickname" jdbcType="VARCHAR" property="nickname" />
+    <result column="toNickName" jdbcType="VARCHAR" property="toNickName"/>
   </resultMap>
 
+    <!--&#45;&#45;     select c.*,u.face_image as face_image,u.nickname as nickname-->
+    <!--&#45;&#45;     from comments c left join users u on c.from_user_id = u.id-->
+    <!--&#45;&#45;     where c.video_id = #{videoId}-->
+    <!--&#45;&#45;     order by c.create_time desc-->
+
   <select id="queryComments" resultMap="BaseResultMap" parameterType="String">
-    select c.*,u.face_image as face_image,u.nickname as nickname
-    from comments c left join users u on c.from_user_id = u.id
-    where c.video_id = #{videoId}
-    order by c.create_time desc
+      select c.*,u.face_image as face_image,u.nickname as nickname,
+      tu.nickname as toNickName
+      from comments c left join users u on c.from_user_id = u.id
+      left join users tu on c.to_user_id = tu.id
+      where c.video_id = #{videoId}
+      order by c.create_time desc
+
   </select>
 </mapper>

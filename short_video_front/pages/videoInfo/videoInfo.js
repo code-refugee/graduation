@@ -13,6 +13,10 @@ Page({
     publisher: '',
     serverUrl: '',
 
+    say: '说点什么吧..',
+    fathercommentid: '',
+    touserid: '',
+
     commentFocus: false,
     contentValue: '',
 
@@ -297,7 +301,10 @@ Page({
   leaveComment: function(){
     var me=this;
     me.setData({
-      commentFocus: true
+      commentFocus: true,
+      say: '说点什么吧..',
+      fathercommentid: '',
+      touserid: '',
     })
   },
 
@@ -323,6 +330,11 @@ Page({
         })
         return
       }
+
+      //获取回复的相关信息
+      var fathercommentid = e.currentTarget.dataset.fathercommentid;
+      var touserid = e.currentTarget.dataset.touserid;
+
       wx.showLoading({
         title: '请等待..',
       })
@@ -332,7 +344,9 @@ Page({
         data: {
           videoId: me.data.videoInfo.id,
           fromUserId: userInfo.id,
-          comment: comment
+          comment: comment,
+          fatherCommentId: fathercommentid,
+          toUserId: touserid
         },
         header: {
           "content-type": "application/json"
@@ -362,6 +376,18 @@ Page({
     }
   },
 
+  //评论回复
+  replayUser: function(e){
+    var me=this;
+    // console.log(e)
+    me.setData({
+      say: '回复： '+ e.currentTarget.dataset.tonickname,
+      fathercommentid: e.currentTarget.dataset.fathercommentid,
+      touserid: e.currentTarget.dataset.touserid,
+      commentFocus: true
+    })
+  },
+
   //评论上拉刷新
   onReachBottom: function(){
     var me=this;
@@ -373,11 +399,12 @@ Page({
     var page = commentsPage+1;
     this.getCommentsList(page);
   },
-  
+
   //查询评论列表
   getCommentsList: function(page){
     var me=this;
     var videoId = me.data.videoInfo.id;
+    // console.log(videoId)
     wx.request({
       url: app.serverUrl + '/getVideoComments?videoId=' + videoId +'&page='+page,
       method: 'POST',
@@ -385,7 +412,7 @@ Page({
         "content-type": "application/json"
       },
       success: function(res){
-        // console.log(res)
+        console.log(res)
         var commentsList = me.data.commentsList;
         me.setData({
           commentsList: commentsList.concat(res.data.data.content),

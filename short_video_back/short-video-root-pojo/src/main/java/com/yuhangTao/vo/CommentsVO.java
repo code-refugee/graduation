@@ -46,6 +46,7 @@ public class CommentsVO {
     private String faceImage;
     private String nickname;
     private String timeAgoStr;
+    private String toNickName;
 
     /**
      * @return id
@@ -179,5 +180,13 @@ public class CommentsVO {
 
     public void setTimeAgoStr(String timeAgoStr) {
         this.timeAgoStr = timeAgoStr;
+    }
+
+    public String getToNickName() {
+        return toNickName;
+    }
+
+    public void setToNickName(String toNickName) {
+        this.toNickName = toNickName;
     }
 }

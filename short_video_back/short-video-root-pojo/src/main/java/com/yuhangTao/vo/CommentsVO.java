@@ -1,4 +1,4 @@
-package com.yuhangTao.pojo;
+package com.yuhangTao.vo;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import java.util.Date;
 
 @ApiModel(value = "评论对象",description = "这是评论对象")
-public class Comments {
+public class CommentsVO {
     @Id
     @ApiModelProperty(hidden = true)
     private String id;
@@ -42,6 +42,10 @@ public class Comments {
      */
     @ApiModelProperty(value = "评论的内容",name = "comment",dataType = "String",required = true)
     private String comment;
+
+    private String faceImage;
+    private String nickname;
+    private String timeAgoStr;
 
     /**
      * @return id
@@ -151,5 +155,29 @@ public class Comments {
      */
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public String getFaceImage() {
+        return faceImage;
+    }
+
+    public void setFaceImage(String faceImage) {
+        this.faceImage = faceImage;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getTimeAgoStr() {
+        return timeAgoStr;
+    }
+
+    public void setTimeAgoStr(String timeAgoStr) {
+        this.timeAgoStr = timeAgoStr;
     }
 }

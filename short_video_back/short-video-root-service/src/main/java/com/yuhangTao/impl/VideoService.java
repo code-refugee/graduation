@@ -1,5 +1,6 @@
 package com.yuhangTao.impl;
 
+import com.yuhangTao.pojo.Comments;
 import com.yuhangTao.pojo.Videos;
 import com.yuhangTao.utils.PageResult;
 
@@ -28,4 +29,10 @@ public interface VideoService {
 
     /*查询我关注的人的视频列表*/
     PageResult queryMyFollowVideos(String userId,Integer page,Integer pageSize);
+
+    /*保存评论*/
+    void saveComment(Comments comment);
+
+    /*查询所有的评论*/
+    PageResult getAllComments(String videoId,Integer page,Integer pageSize);
 }

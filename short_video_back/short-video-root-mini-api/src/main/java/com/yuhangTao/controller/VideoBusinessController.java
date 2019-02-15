@@ -4,6 +4,7 @@ import com.yuhangTao.enums.VideoStatusEnum;
 import com.yuhangTao.impl.BgmService;
 import com.yuhangTao.impl.VideoService;
 import com.yuhangTao.pojo.Bgm;
+import com.yuhangTao.pojo.Comments;
 import com.yuhangTao.pojo.Videos;
 import com.yuhangTao.utils.FFMpegUtils;
 import com.yuhangTao.utils.IMoocJSONResult;
@@ -224,6 +225,28 @@ public class VideoBusinessController extends BasicController{
     public IMoocJSONResult userDisLikeVideo(String userId, String videoId, String videoCreateId){
         videoService.userDisLikeVideo(userId,videoId,videoCreateId);
         return IMoocJSONResult.ok();
+    }
+
+    @PostMapping("/saveComment")
+    @ApiOperation(value = "保存评论",notes = "保存评论的接口")
+    public IMoocJSONResult saveComment(@RequestBody Comments comment){
+        videoService.saveComment(comment);
+        return IMoocJSONResult.ok();
+    }
+
+    @PostMapping("/getVideoComments")
+    @ApiOperation(value = "获取所有的评论",notes = "获取所有评论的接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "videoId",value = "视频Id",required = true,dataType = "String",paramType = "query"),
+            @ApiImplicitParam(name = "page",value = "第几页",required = true,dataType = "Integer",paramType = "query")
+    })
+    public IMoocJSONResult getVideoComments(String videoId,Integer page){
+        if(StringUtils.isBlank(videoId))
+            return IMoocJSONResult.errorMsg("必要信息丢失");
+        if(page==null)
+            page=1;
+        PageResult result=videoService.getAllComments(videoId,page,4);
+        return IMoocJSONResult.ok(result);
     }
 
 

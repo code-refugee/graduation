@@ -7,5 +7,6 @@ com\yuhangTao\pojo\Bgm.class
 com\yuhangTao\pojo\Comments.class
 com\yuhangTao\vo\UsersVO.class
 com\yuhangTao\pojo\Users.class
+com\yuhangTao\vo\CommentsVO.class
 com\yuhangTao\pojo\SearchRecords.class
 com\yuhangTao\pojo\Videos.class

@@ -17,6 +17,7 @@ com\yuhangTao\org\n3r\idworker\utils\HttpReq.class
 com\yuhangTao\utils\IMoocJSONResult.class
 com\yuhangTao\org\n3r\idworker\WorkerIdStrategy.class
 com\yuhangTao\org\n3r\idworker\strategy\DefaultRandomCodeStrategy$1.class
+com\yuhangTao\utils\TimeAgoUtils.class
 com\yuhangTao\org\n3r\idworker\strategy\DefaultWorkerIdStrategy$1.class
 com\yuhangTao\org\n3r\idworker\strategy\FileLock.class
 com\yuhangTao\utils\FFMpegUtils.class

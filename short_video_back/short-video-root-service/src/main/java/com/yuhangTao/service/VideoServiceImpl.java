@@ -5,10 +5,13 @@ import com.github.pagehelper.PageInfo;
 import com.yuhangTao.impl.VideoService;
 import com.yuhangTao.mapper.*;
 import com.yuhangTao.org.n3r.idworker.Sid;
+import com.yuhangTao.pojo.Comments;
 import com.yuhangTao.pojo.SearchRecords;
 import com.yuhangTao.pojo.UsersLikeVideos;
 import com.yuhangTao.pojo.Videos;
 import com.yuhangTao.utils.PageResult;
+import com.yuhangTao.utils.TimeAgoUtils;
+import com.yuhangTao.vo.CommentsVO;
 import com.yuhangTao.vo.VideosVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import tk.mybatis.mapper.entity.Example;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -35,6 +39,12 @@ public class VideoServiceImpl implements VideoService {
 
     @Autowired
     private UsersLikeVideosMapper usersLikeVideosMapper;
+
+    @Autowired
+    private CommentsMapper commentsMapper;
+
+    @Autowired
+    private CommentsCustomMapper commentsCustomMapper;
 
     @Autowired
     private Sid sid;
@@ -111,6 +121,34 @@ public class VideoServiceImpl implements VideoService {
         pageResult.setContent(result);
         return pageResult;
 
+    }
+
+    /*保存评论*/
+    @Override
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void saveComment(Comments comment) {
+        String id=sid.nextShort();
+        comment.setId(id);
+        comment.setCreateTime(new Date());
+        commentsMapper.insertSelective(comment);
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public PageResult getAllComments(String videoId, Integer page, Integer pageSize) {
+        PageHelper.startPage(page,pageSize);
+        List<CommentsVO> result= commentsCustomMapper.queryComments(videoId);
+        //做这一步的目的是使我们得到的时间更易于客户阅读
+        for (CommentsVO c : result){
+            c.setTimeAgoStr(TimeAgoUtils.format(c.getCreateTime()));
+        }
+        PageInfo<CommentsVO> info=new PageInfo<>(result);
+        PageResult pageResult=new PageResult();
+        pageResult.setPage(page);
+        pageResult.setAllPages(info.getPages());
+        pageResult.setTotal(info.getTotal());
+        pageResult.setContent(result);
+        return pageResult;
     }
 
     /*

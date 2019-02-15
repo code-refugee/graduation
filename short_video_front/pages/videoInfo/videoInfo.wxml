@@ -66,3 +66,28 @@ objectFit='{{cover}}'
 
 </video>
 </view>
+
+<!--使用了input组件，里面的各种属性可以去官网查看文档-->
+<view>
+  <view class='saySthView'>
+    <input name='commentContent' class='saySth' placeholder='说点什么吧..' confirm-type='send'
+    bindconfirm='saveComment' focus='{{commentFocus}}' value='{{contentValue}}'
+    ></input>
+  </view>
+
+  <block wx:for='{{commentsList}}'>
+    <view class='comments-all'>
+      <view class='container-comments'>
+        <image src='{{serverUrl}}{{item.faceImage}}' class='face-comments'></image>
+        <view class='nickname-comments'>
+          <label class='nickname-lbl'>@{{item.nickname}}</label>
+          于
+          <label class='date-lbl'>{{item.timeAgoStr}}</label>
+          留言：
+        </view>
+      </view>
+      <view class='comments-content'>{{item.comment}}</view>
+    </view>
+  </block>
+
+</view>

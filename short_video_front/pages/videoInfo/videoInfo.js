@@ -11,7 +11,14 @@ Page({
     videoInfo: [],
     userLikeVideo: false,
     publisher: '',
-    serverUrl: ''
+    serverUrl: '',
+
+    commentFocus: false,
+    contentValue: '',
+
+    commentsList: [],
+    commentsPage: 1,
+    commentsTotalPage: 1
   },
 
   videoCtx: {},//用来保存video的对象
@@ -74,6 +81,8 @@ Page({
         })
       }
     })
+
+    this.getCommentsList(1)
   } ,
 
   onShow: function(){
@@ -282,6 +291,109 @@ Page({
       title: '我分享了短视频--' + videoInfo.videoDesc,
       path: '../videoInfo/videoInfo?videoInfo=' + JSON.stringify(videoInfo)
     }
+  },
+
+  //点击图标，弹出底部input输入框
+  leaveComment: function(){
+    var me=this;
+    me.setData({
+      commentFocus: true
+    })
+  },
+
+  //保存评论
+  saveComment: function(e){
+    // console.log(e);
+    var me=this;
+    var userInfo = app.getGlobalUserInfo();
+    //如果用户未登录则没有评论的权限
+    if (userInfo == null || userInfo == '' || userInfo == undefined) {
+      var videoInfo = JSON.stringify(me.data.videoInfo);
+      var redirtUrl = '../videoInfo/videoInfo#videoInfo@' + videoInfo
+      wx.navigateTo({
+        url: '../userLogin/login?redirtUrl=' + redirtUrl,
+      })
+    } else {
+      var comment = e.detail.value;
+      if (comment == null || comment == '' || comment == undefined) {
+        wx.showToast({
+          title: '说点什么吧~',
+          icon: 'none',
+          duration: 2000
+        })
+        return
+      }
+      wx.showLoading({
+        title: '请等待..',
+      })
+      wx.request({
+        url: app.serverUrl +'/saveComment',
+        method: 'POST',
+        data: {
+          videoId: me.data.videoInfo.id,
+          fromUserId: userInfo.id,
+          comment: comment
+        },
+        header: {
+          "content-type": "application/json"
+        },
+        success: function(){
+          wx.hideLoading();
+          wx.showToast({
+            title: '评论成功',
+            icon: 'none',
+            duration: 2000
+          })
+          me.setData({
+            contentValue: '',
+            commentsList: []
+          })
+          me.getCommentsList(1);
+        },
+        fail: function(){
+          wx.hideLoading();
+          wx.showToast({
+            title: '出错了呢~',
+            icon: 'none',
+            duration: 2000
+          })
+        }
+      })
+    }
+  },
+
+  //评论上拉刷新
+  onReachBottom: function(){
+    var me=this;
+    var commentsPage = me.data.commentsPage;
+    var commentsTotalPage = me.data.commentsTotalPage;
+    if (commentsPage == commentsTotalPage){
+      return;
+    }
+    var page = commentsPage+1;
+    this.getCommentsList(page);
+  },
+  
+  //查询评论列表
+  getCommentsList: function(page){
+    var me=this;
+    var videoId = me.data.videoInfo.id;
+    wx.request({
+      url: app.serverUrl + '/getVideoComments?videoId=' + videoId +'&page='+page,
+      method: 'POST',
+      header: {
+        "content-type": "application/json"
+      },
+      success: function(res){
+        // console.log(res)
+        var commentsList = me.data.commentsList;
+        me.setData({
+          commentsList: commentsList.concat(res.data.data.content),
+          commentsPage: page,
+          commentsTotalPage: res.data.data.allPages
+        })
+      }
+    })
   }
 
 

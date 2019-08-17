@@ -1,0 +1,14 @@
+INSERT INTO `search_records` VALUES ('190128GPK7MWP46W', '大锤');
+INSERT INTO `search_records` VALUES ('190128GR71PCYPBC', '大锤');
+INSERT INTO `search_records` VALUES ('190128GSGPSZBFY8', '狙');
+INSERT INTO `search_records` VALUES ('190128GTR8Y3B72W', '大锤');
+INSERT INTO `search_records` VALUES ('190128GW9KKTM70H', '大锤');
+INSERT INTO `search_records` VALUES ('190128GWCG7T36CH', '我');
+INSERT INTO `search_records` VALUES ('190128GWG6P80D1P', '热');
+INSERT INTO `search_records` VALUES ('190129D5DNHWGH6W', '可爱');
+INSERT INTO `search_records` VALUES ('190209FA3AW2Y2RP', '大锤');
+INSERT INTO `search_records` VALUES ('190210B4RZ7KFDWH', '狙');
+INSERT INTO `search_records` VALUES ('190210B4T40NGT2W', '可爱');
+INSERT INTO `search_records` VALUES ('190408DRXW5P3A14', '狙');
+INSERT INTO `search_records` VALUES ('190412F3G10P6894', '狙');
+INSERT INTO `search_records` VALUES ('190413803ADSTDKP', '可爱');

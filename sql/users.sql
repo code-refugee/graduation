@@ -1,0 +1,2 @@
+INSERT INTO `users` VALUES ('181217B1PGFZMSNC', 'root', '4QrcOUm6Wau+VuBX8g+IPg==', '/181217B1PGFZMSNC/face/wxa10f9d0698be3bdf.o6zAJs3fjuVKofsivv--2XditZU4.LVuwjM5LNTo741c39a4d852370426c85ffdfbd2fbb07.jpeg', 'root', 1, 0, 4);
+INSERT INTO `users` VALUES ('181218AHP39DD400', 'deep', '4QrcOUm6Wau+VuBX8g+IPg==', '/181218AHP39DD400/face/wx7e8ea177e003f5a2.o6zAJs3fjuVKofsivv--2XditZU4.eDLISOJjGRa2ab49368bf2072b8f0c1d77226034de20.png', 'deep', 0, 1, 0);
